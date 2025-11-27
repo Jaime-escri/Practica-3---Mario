@@ -96,8 +96,5 @@ public class GameObjectContainer {
 		return sb.toString();
 	}
 
-	public void setListObjects(List<GameObject> list){
-		this.gameObjects = list;
-	}
 
 }

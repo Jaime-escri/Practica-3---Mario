@@ -36,7 +36,6 @@ public class Mario extends MovingObject{
 		super();
 	}
 
-
 	@Override
 	public String getIcon(){
 		return icon;

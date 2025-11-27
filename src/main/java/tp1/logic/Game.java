@@ -27,6 +27,7 @@ public class Game implements GameModel, GameStatus, GameWorld{
 	private Mario mario;
 	public int nLevel;
 	private boolean isFinished;
+	private GameConfiguration fileloader;
 
 
 	public Game(int nLevel) {
@@ -37,21 +38,10 @@ public class Game implements GameModel, GameStatus, GameWorld{
 		this.wins = false;
 		this.loses = false;
 		this.isFinished = false;
+		this.fileloader = null;
 		this.container = new GameObjectContainer();
 		initLevel(nLevel);
-	}
-
-	public Game(int points, int lives, int time, GameObjectContainer cont, Mario m){
-		this.points = points;
-		this.lives = lives;
-		this.time = time;
-		this.container = cont;
-		this.mario = m;
-		this.wins = false;
-		this.loses = false;
-		this.isFinished = false;
-	}
-	
+	}	
 	
 	public String positionToString(int col, int row) {
 		Position pos = new Position(row, col);
@@ -105,16 +95,19 @@ public class Game implements GameModel, GameStatus, GameWorld{
 	
 	public void initLevel(int nLevel) { //Vemos qué nivel inicializamos
 		this.time = 100;
-		
-		if(nLevel == 0){
-			initLevel0();
-		}else if(nLevel == 1){
-			initLevel1();
-		}else if(nLevel == -1){
-			this.lives = 3;
-			this.time = 100;
-			this.points = 0;
-			initLevelFree();
+		if(this.fileloader == null){
+			if(nLevel == 0){
+				initLevel0();
+			}else if(nLevel == 1){
+				initLevel1();
+			}else if(nLevel == -1){
+				this.lives = 3;
+				this.time = 100;
+				this.points = 0;
+				initLevelFree();
+			}
+		}else{
+			setFileConfiguration(this.fileloader);
 		}
 	}
 
@@ -290,9 +283,14 @@ public class Game implements GameModel, GameStatus, GameWorld{
 		this.points = gc.points();
 		this.lives = gc.numLives();
 		this.time = gc.getRemainingTime();
+		this.fileloader = gc;
 
-		container.setListObjects(gc.getNPCObjects());
-		this.mario = gc.getMario();
+		this.container = new GameObjectContainer();
+		for(GameObject o : gc.getNPCObjects()){
+			container.add(o);
+		}
+
+		this.mario = new Mario();
 		container.add(this.mario);
 	}
 }
