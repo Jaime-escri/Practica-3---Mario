@@ -1,6 +1,6 @@
 package tp1.exceptions;
 
-public class ActionParseException extends GameModelException{
+public class ActionParseException extends GameParseException{
     public ActionParseException(String s){
         super(s);
     }

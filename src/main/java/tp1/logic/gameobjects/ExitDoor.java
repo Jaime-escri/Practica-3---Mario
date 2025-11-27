@@ -4,7 +4,6 @@ import tp1.logic.GameObject;
 import tp1.logic.GameWorld;
 import tp1.logic.Position;
 import tp1.view.Messages;
-import tp1.logic.GameWorld;
 import tp1.exceptions.CommandParseException;
 import tp1.exceptions.PositionParseException;
 import tp1.logic.GameItem;
@@ -72,21 +71,20 @@ public class ExitDoor extends GameObject{
     }
     
     public GameObject parse(String[] objWords, GameWorld world) throws CommandParseException{
-        if(!(objWords[2].toLowerCase().equals("exitdoor") || objWords[2].toLowerCase().equals("ed"))){
+        if(!(objWords[1].toLowerCase().equals("exitdoor") || objWords[1].toLowerCase().equals("ed"))){
             return null;
         }
-
-        if(objWords.length < 3){
-            throw new CommandParseException("Imposible to complete ExitDoor, must be minimum 3 arguments");
-        }
-
         
         try {
-            Position pos = Position.parse(objWords[1]);
-             return new ExitDoor(pos,world);  
+            Position pos = Position.parse(objWords[0]);
+            return new ExitDoor(pos,world);  
         } catch (PositionParseException ppe) {
-            throw new CommandParseException("Imposible position to parse", ppe);
+            throw new CommandParseException(Messages.INVALID_POSITION.formatted(objWords[0]), ppe);
         } 
+    }
+    @Override
+    public String getDescription(){
+        return "("+pos.getRow()+"," + pos.getCol()+") ExitDoor";
     }
     
 }

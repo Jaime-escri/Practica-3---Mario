@@ -33,14 +33,6 @@ public class GameObjectContainer {
 		return Messages.EMPTY;
 	}
 
-	/*public String positionToString(Position pos){
-		for(GameObject g : gameObjects){
-			if(g.getPosition().equals(pos) && g.isAlive()){
-				return g.getIcon();
-			}
-		}
-		return Messages.EMPTY;
-	} */
 
 	public void update(){
 		for(GameObject g : gameObjects){
@@ -55,24 +47,6 @@ public class GameObjectContainer {
 			pendingToAdd.clear();
 		}
 	}
-
-	
-
-	
-
-	/*public void removeDeadObjects(){
-		for(int i = 0; i < gameObjects.size(); i++){
-			GameObject obj = gameObjects.get(i);
-			if(!obj.isAlive()){
-				gameObjects.remove(i);
-				i--;
-			}
-			
-		}
-
-	}*/
-
-
 
 	public void removeDeadObjects() {
 
@@ -113,46 +87,17 @@ public class GameObjectContainer {
 		gameObjects.clear();
 	}
 
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		for(GameObject g : gameObjects){
+			sb.append(g.getDescription()).append("\n");
+		}
+		return sb.toString();
+	}
+
+	public void setListObjects(List<GameObject> list){
+		this.gameObjects = list;
+	}
+
 }
-
-//SOLO PARA LA LÓGICA
-
-/*public void update(Game game, List<Action> actions){
-
-		mario.update(game, actions); //Actualizamos a mario
-		if(mario.interactWith(exitDoor)){ 
-			game.marioExited();
-		}
-
-		removeDeadObjects(); //Si mario ha tocado a un goomba, este muere, y lo quitamos antes de actualizarlo
-		
-		for(Goomba goomba : goombas){
-			goomba.update(game); //Actualizamos a los goombas para ver si estos, después del movimiento de mario, interaccionan con él
-		}
-
-		doInteractionsFrom(mario);
-		removeDeadObjects(); //Si han interaccionado, los eliminamos 
-
-		if(mario.isAlive() == false){
-			game.playerLoses();
-		}	
-	} 
-		
-	
-	public void cleanGoombas(){
-		goombas.clear();
-	}
-
-	public void doInteractionsFrom(Mario mario){
-		for(Goomba g : goombas){
-			boolean interact = mario.interactWith(g);
-			if(interact && !g.isAlive()){
-				game.addPoints();
-			}
-			
-		}
-	}
-
-*/
-
-

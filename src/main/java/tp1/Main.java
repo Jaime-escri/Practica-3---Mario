@@ -3,7 +3,6 @@ package tp1;
 import java.util.Locale;
 
 import tp1.control.Controller;
-import tp1.logic.GameStatus;
 import tp1.logic.Game;
 import tp1.view.ConsoleColorsView;
 import tp1.view.ConsoleView;

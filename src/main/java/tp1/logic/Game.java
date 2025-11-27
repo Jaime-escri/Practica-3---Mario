@@ -1,6 +1,11 @@
 package tp1.logic;
 
 import tp1.view.Messages;
+
+import java.io.PrintWriter;
+
+import tp1.exceptions.GameLoadException;
+import tp1.exceptions.GameModelException;
 import tp1.exceptions.OffBoardException;
 import tp1.logic.gameobjects.ExitDoor;
 import tp1.logic.gameobjects.Land;
@@ -23,6 +28,7 @@ public class Game implements GameModel, GameStatus, GameWorld{
 	public int nLevel;
 	private boolean isFinished;
 
+
 	public Game(int nLevel) {
 		this.nLevel = nLevel;
 		this.time = 100;
@@ -33,6 +39,17 @@ public class Game implements GameModel, GameStatus, GameWorld{
 		this.isFinished = false;
 		this.container = new GameObjectContainer();
 		initLevel(nLevel);
+	}
+
+	public Game(int points, int lives, int time, GameObjectContainer cont, Mario m){
+		this.points = points;
+		this.lives = lives;
+		this.time = time;
+		this.container = cont;
+		this.mario = m;
+		this.wins = false;
+		this.loses = false;
+		this.isFinished = false;
 	}
 	
 	
@@ -245,8 +262,37 @@ public class Game implements GameModel, GameStatus, GameWorld{
 
 	public void addObject(GameObject o) throws OffBoardException{
 		if(!isInsideBoard(o.getPosition())){
-			throw new OffBoardException("Position out of board");
+			throw new OffBoardException(Messages.OFF_BOARD);
 		}
 		container.add(o);
+	}
+
+	public void save(String fileName) throws GameModelException {
+		try (PrintWriter pw = new PrintWriter(fileName)) {
+			pw.println(this.time + " " + this.points + " " + this.lives);
+			pw.print(container.toString());
+		} catch (Exception e) {
+			throw new GameModelException("Error writting file " + fileName, e);
+		}
+	}
+
+	public void load(String file) throws GameLoadException{
+		try {
+			GameConfiguration conf = new FileGameConfiguration(file, this);
+			setFileConfiguration(conf);
+		} catch (Exception e) {
+			throw new GameLoadException(e.getMessage(), e);
+		}
+		
+	}
+
+	public void setFileConfiguration(GameConfiguration gc){
+		this.points = gc.points();
+		this.lives = gc.numLives();
+		this.time = gc.getRemainingTime();
+
+		container.setListObjects(gc.getNPCObjects());
+		this.mario = gc.getMario();
+		container.add(this.mario);
 	}
 }

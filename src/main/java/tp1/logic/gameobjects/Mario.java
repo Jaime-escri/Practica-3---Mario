@@ -72,7 +72,6 @@ public class Mario extends MovingObject{
 		if(pos.equals(before)){
 			automaticMovement(world);
 		}
-		
 		world.doInteractionsFrom(this);
 
 	}
@@ -301,14 +300,14 @@ public class Mario extends MovingObject{
 	@Override
 	public GameObject parse(String[] words, GameWorld world)throws CommandParseException{
 		//Valores por defecto, right big
-		if(!words[2].toLowerCase().equals("m") && !words[2].toLowerCase().equals("mario")){
+		if(!words[1].toLowerCase().equals("m") && !words[1].toLowerCase().equals("mario")){
 			return null;
 		}
 
 		//Si la long. es  > 2, entonces especifica los atributos de mario
 		int direction = 1;
 		boolean aux = true;
-		if(words.length > 3){
+		if(words.length > 2){
 			String s = words[3].toLowerCase();
 			if(s != null){
 				if(s.equals("r") || s.equals("right")){
@@ -317,24 +316,22 @@ public class Mario extends MovingObject{
 				else if(s.equals("l") || s.equals("left")){
 					direction = -1;
 				}else{
-					throw new CommandParseException("Invalid arguments to complete Mario, direction fail");
+					throw new CommandParseException(Messages.UNKNOWN_MOVING_OBJECT.formatted(String.join(" ",words)));
 				}
 			}
-			s = words[4].toLowerCase();
+			s = words[2].toLowerCase();
 			if(s!=null){
 				if(s.equals("b") || s.equals("big")) aux = true;
 				else if(s.equals("s") || s.equals("small")) aux = false;
-				else throw new CommandParseException("Invalid arguments to complete Mario, size fail");
+				else throw new CommandParseException(Messages.INVALID_SIZE.formatted(String.join(" ",words)));
 			}
-		}else if(words.length <= 2){
-			throw new CommandParseException("Imposible to complete Mario, must be minimum 3 arguments");
 		}
 		
 		try {
-			Position pos = Position.parse(words[1]);
+			Position pos = Position.parse(words[0]);
 			return new Mario(direction, false, pos, aux, world);
 		} catch (PositionParseException ppe) {
-			throw new CommandParseException("Imposible position to parse" , ppe);
+			throw new CommandParseException(Messages.INVALID_POSITION.formatted(words[0]) , ppe);
 		}
 		
 		
@@ -360,30 +357,21 @@ public class Mario extends MovingObject{
 		return this;
 	}
 
-	/* 
-	public  boolean receiveInteraction(Goomba obj){
-		boolean interact = false;
+	@Override
+	public String getDescription(){
+		String aux, aux1;
+		if(isBig()){
+			aux = "BIG ";
+		}else aux = "SMALL ";
 
-		if(pos.equals(obj.getPosition())){
-			interact = true;
-
-			if(lastAction == Action.DOWN){ 
-				//obj.setAlive();
-				//world.addPoints();
-				return true;
-			}else{
-				if(this.isBig()){
-					big = false;
-				}else{
-					this.alive = false;
-					//world.playerLoses();
-				}
-			}
-		}
-
-		return interact;
+		if(dir == 1) aux1 = "RIGHT";
+		else aux1 = "LEFT";
+        return "("+pos.getRow()+"," + pos.getCol()+") MARIO " + aux +aux1;
+    }
+	@Override
+	public boolean isMario(){
+		return true;
 	}
-	*/
 
 }
 

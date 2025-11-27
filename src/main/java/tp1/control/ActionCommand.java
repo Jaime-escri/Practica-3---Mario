@@ -1,6 +1,6 @@
 package tp1.control;
-import java.util.ArrayList;
-import java.util.List;
+
+
 
 import tp1.exceptions.ActionParseException;
 import tp1.exceptions.CommandParseException;
@@ -34,8 +34,6 @@ public class ActionCommand extends AbstractCommand{
         ActionList list = new ActionList();
         try {
             list.addStringAction(words);   
-           
-            
         } catch (ActionParseException ape) {
             throw new CommandParseException(Messages.UNKNOWN_ACTION.formatted(words[1]), ape);
         }

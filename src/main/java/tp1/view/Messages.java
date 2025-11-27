@@ -24,6 +24,30 @@ public class Messages {
 	public static final String DEBUG = "[DEBUG] Executing: %s%n";
 	public static final String ERROR = "[ERROR] Error: %s";
 
+	public static final String UNKNOWN_OBJECT =
+    "Unknown game object: %s";
+
+	public static final String INVALID_CONFIGURATION =
+		"Invalid file \"%s\" configuration";
+
+	public static final String OFF_BOARD =
+		"Object position is off board: \"%s\"";
+
+	public static final String UNKNOWN_MOVING_OBJECT =
+		"Unknown moving object direction: \"%s\"";
+
+	public static final String INVALID_SIZE =
+		"Invalid Mario size: \"%s\"";
+
+	public static final String INVALID_POSITION =
+		"Invalid position: \"%s\"";
+
+	public static final String INPUT_STRING =
+		"For input string: \"%s\"";
+
+	public static final String INVALID_OBJECT_POSITION =
+		"Invalid object position: \"%s\"";
+
 
 	// GAME STATUS
 	public static final String NUMBER_OF_CYCLES = "Number of cycles: %s";
@@ -118,5 +142,18 @@ public class Messages {
 	public static final String COMMAND_OBJECT_SHORTCUT = "aO";
 	public static final String COMMAND_OBJECT_DETAILS = "[a]dd[O]bject <object_description>";
 	public static final String COMMAND_OBJECT_HELP = "adds to the board the object given by object_description";
-
+//Save messages
+	public static final String COMMAND_SAVE_NAME = "save";
+	public static final String COMMAND_SAVE_SHORTCUT = "s";
+	public static final String COMMAND_SAVE_DETAILS = "[s]ave <fileName>:";
+	public static final String COMMAND_SAVE_HELP = "save the actual configuration in text file <fileName>";
+	public static final String SAVE_SUCCESFULL_STRING = "The file: %s is created succesfully";
+//Load messages
+	public static final String COMMAND_LOAD_NAME = "load";
+	public static final String COMMAND_LOAD_SHORTCUT = "l";
+	public static final String COMMAND_LOAD_DETAILS = "[l]oad <fileName>:";
+	public static final String COMMAND_LOAD_HELP = "load the game configuration from text file <fileName>";
+	public static final String ERROR_CANNOT_LOAD = "Unable to load game configuration from file: %s";
+	public static final String FILE_NOT_FOUND = "File not found: %s";
+	public static final String INCORRECT_STATUS = "Incorrect game status: %s";
 }

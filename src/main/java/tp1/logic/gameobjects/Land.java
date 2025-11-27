@@ -81,19 +81,20 @@ public class Land extends GameObject{
 
     @Override
     public GameObject parse(String[] words, GameWorld world) throws CommandParseException{
-         if(!words[2].toLowerCase().equals("l") && !words[2].toLowerCase().equals("land")){
+        if(!words[1].toLowerCase().equals("l") && !words[1].toLowerCase().equals("land")){
             return null;
         }
-        if(words.length < 3){
-            throw new CommandParseException("Imposible to complete Land, must be minimum 3 arguments");
-        } 
         try {
-            Position pos = Position.parse(words[1]);
+            Position pos = Position.parse(words[0]);
             return new Land(pos, world);
         } catch (PositionParseException ppe) {
-            throw new CommandParseException("Imposible position to parse" , ppe);
+            throw new CommandParseException(Messages.INVALID_POSITION.formatted(words[0]) , ppe);
         }    
        
+    }
+    @Override
+    public String getDescription(){
+        return "("+pos.getRow()+"," + pos.getCol()+") LAND";
     }
 
 

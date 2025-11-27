@@ -1,7 +1,6 @@
 package tp1.logic;
 
 import tp1.exceptions.CommandParseException;
-import tp1.exceptions.GameModelException;
 import tp1.view.Messages;
 
 public abstract class GameObject implements GameItem{
@@ -49,5 +48,13 @@ public abstract class GameObject implements GameItem{
 
     public GameObject parse(String[] objWords, GameWorld world) throws CommandParseException{
         return null;
+    }
+
+    public String getDescription(){
+        return null;
+    }
+
+    public boolean isMario(){
+        return false;
     }
 }

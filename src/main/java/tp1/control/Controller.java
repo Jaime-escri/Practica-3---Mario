@@ -1,9 +1,7 @@
 package tp1.control;
 
 import tp1.view.GameView;
-import tp1.view.Messages;
 import tp1.exceptions.CommandException;
-import tp1.logic.Action;
 import tp1.logic.GameModel;
 
 /**
@@ -34,10 +32,14 @@ public class Controller {
 			} catch (CommandException e) {
 				view.showError(e.getMessage());
 				Throwable cause = e.getCause();
+				String last = e.getMessage();
 				while (cause != null) {
-					view.showError(cause.getMessage());
+					if (cause.getMessage() != null && !cause.getMessage().equals(last)) {
+						view.showError(cause.getMessage());
+						last = cause.getMessage();
+					}
 					cause = cause.getCause();
-				}	
+				}
 			}
 			
 		}

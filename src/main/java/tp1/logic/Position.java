@@ -1,7 +1,8 @@
 package tp1.logic;
 
 import tp1.exceptions.PositionParseException;
-import tp1.logic.Action;
+import tp1.view.Messages;
+
 
 /**
  * 
@@ -86,7 +87,7 @@ public class Position {
 			return new Position(row, col);
 		}
 		catch (NumberFormatException e) {
-			throw new PositionParseException("Invalid number format in position", e);
+			throw new PositionParseException(Messages.INPUT_STRING.formatted(s), e);
 		}
 	}
 

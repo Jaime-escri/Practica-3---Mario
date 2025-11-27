@@ -1,7 +1,6 @@
 package tp1.logic.gameobjects;
 
 import tp1.exceptions.CommandParseException;
-import tp1.exceptions.GameModelException;
 import tp1.exceptions.PositionParseException;
 import tp1.logic.Action;
 import tp1.logic.GameItem;
@@ -90,16 +89,16 @@ public class Box extends GameObject{
     
     public GameObject parse(String[] objWords, GameWorld world) throws CommandParseException{ 
         //Si no es box, retorn null.
-        if(!(objWords[2].toLowerCase().equals("box") || objWords[2].toLowerCase().equals("b"))){
+        if(!(objWords[1].toLowerCase().equals("box") || objWords[1].toLowerCase().equals("b"))){
             return null;
         }
 
         //Si sí que es box, empezamos a gestionar excepciones
         
         boolean aux = false;
-        if (objWords.length >= 4) {
+        if (objWords.length >= 2) {
             
-            String state = objWords[3].toLowerCase();
+            String state = objWords[2].toLowerCase();
             if (state.equals("empty") || state.equals("e")) {
                 aux = true;   // vacía
             } else if (state.equals("full") || state.equals("f")) {
@@ -111,13 +110,18 @@ public class Box extends GameObject{
 
         //Intentamos parsear la posición, si no lo consigue, lanzamose excepción
         try {
-            Position pos = Position.parse(objWords[1]);
+            Position pos = Position.parse(objWords[0]);
             return new Box(pos,world,aux);  
         } catch (PositionParseException ppe) {
-            throw new CommandParseException("Imposible position, fail parse", ppe);
-        }
-
-        
+            throw new CommandParseException(Messages.INVALID_POSITION.formatted(objWords[0]), ppe);
+        }  
+    }
+    @Override
+    public String getDescription(){
+        String aux;
+        if(this.open)aux = "FULL";
+        else aux = "EMPTY";
+        return "("+pos.getRow()+"," + pos.getCol()+") BOX " + aux;
     }
     
 

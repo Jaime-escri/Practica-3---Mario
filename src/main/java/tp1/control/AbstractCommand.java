@@ -1,6 +1,6 @@
 package tp1.control;
 
-import tp1.view.GameView;
+
 
 public abstract class AbstractCommand implements Command {
     

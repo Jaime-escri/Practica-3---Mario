@@ -1,9 +1,7 @@
 package tp1.logic.gameobjects;
 
 import tp1.exceptions.CommandParseException;
-import tp1.exceptions.GameModelException;
 import tp1.exceptions.PositionParseException;
-import tp1.logic.Action;
 import tp1.logic.GameWorld;
 import tp1.logic.GameItem;
 import tp1.logic.MovingObject;
@@ -47,40 +45,9 @@ public class Goomba extends MovingObject{
     }
 
     public void update(){//Exception
-        automaticMovement();
-        world.doInteractionsFrom(this);
+        super.update(this);
     }
 
-    public void automaticMovement(){//Exception
-        if(!alive){
-            return;
-        }
-
-        Position below = Position.move(pos, Action.DOWN); //Posición de debajo, primera comprobación para caída automática
-        boolean haySuelo = world.isSolid(below); //Comprobamos si hay suelo para siguiente mov automático
-
-        if(!haySuelo){
-            pos = below;
-
-            if(!world.isInsideBoard(Position.move(below, Action.DOWN))){ //Si cae y no hay land, muere el goomba
-                alive = false;
-            }
-            return;     
-        }
-
-        Position next = Position.move(pos, Action.LEFT); //Si hay suelo, comenzamos a moverlo a la izquierda (dir = -1)
-        boolean hayObstaculo = world.isSolid(next); //Si hay obstaculo, movemos a la dirección contraria (derecha)
-
-        if(hayObstaculo){
-            dir = -dir;
-
-        }else{
-            pos = next;
-        }
-
-
-        dir = world.isNotInBoard(pos);
-    }
 
     @Override
 	public boolean interactWith(GameItem other) {
@@ -115,27 +82,33 @@ public class Goomba extends MovingObject{
 
     @Override
     public GameObject parse(String[] words, GameWorld world) throws CommandParseException{
-        if(!words[2].toLowerCase().equals("goomba") && !words[2].toLowerCase().equals("g")){
+        if(!words[1].toLowerCase().equals("goomba") && !words[1].toLowerCase().equals("g")){
             return null;
         }
-
-        if(words.length < 3){
-            throw new CommandParseException("Imposible to complete Goomba, must be minimum 3 arguments");
-        }
-
         int direction = -1;
-        if(words.length == 4){
-            direction = 1;
+        if(words.length == 3){
+            String aux = words[2];
+            if(aux.toLowerCase().equals("right") || aux.toLowerCase().equals("r")) direction = 1;
+            else if(aux.toLowerCase().equals("left")|| aux.toLowerCase().equals("l")) direction = -1;
+            else throw new CommandParseException(Messages.UNKNOWN_MOVING_OBJECT.formatted(String.join("", words)));
         }
         try{
-            Position pos = Position.parse(words[1]);
+            Position pos = Position.parse(words[0]);
             return new Goomba(direction,false,pos,world);
 
         }catch(PositionParseException ppe){
-            throw new CommandParseException("Imposible position to parse", ppe);
+            throw new CommandParseException(Messages.INVALID_POSITION.formatted(words[0]), ppe);
         }
        
        
         
+    }
+    @Override
+    public String getDescription(){
+        String aux;
+        if(this.dir == 1){
+            aux = "RIGHT";
+        }else aux = "LEFT";
+        return "("+pos.getRow()+"," + pos.getCol()+") GOOMBA " + aux;
     }
 }

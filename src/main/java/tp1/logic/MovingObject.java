@@ -15,6 +15,39 @@ public abstract class MovingObject extends GameObject{
         super();
     }
 
-    public void move(){
+    public void update(GameObject g){
+        move(g);
+    }
+
+    public void move(GameObject g){
+        if(!g.isAlive()){
+            return;
+        }
+
+        Position below = Position.move(pos, Action.DOWN); //Posición de debajo, primera comprobación para caída automática
+        boolean haySuelo = world.isSolid(below); //Comprobamos si hay suelo para siguiente mov automático
+
+        if(!haySuelo){
+            g.pos = below;
+
+            if(!world.isInsideBoard(Position.move(below, Action.DOWN))){ //Si cae y no hay land, muere el goomba
+                g.alive = false;
+            }
+            return;     
+        }
+
+        Position next = Position.move(pos, Action.LEFT); //Si hay suelo, comenzamos a moverlo a la izquierda (dir = -1)
+        boolean hayObstaculo = world.isSolid(next); //Si hay obstaculo, movemos a la dirección contraria (derecha)
+
+        if(hayObstaculo){
+            this.dir = -this.dir;
+
+        }else{
+            g.pos = next;
+        }
+
+
+        this.dir = world.isNotInBoard(pos);
+        world.doInteractionsFrom(g);
     }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tp1.exceptions.ActionParseException;
+import tp1.view.Messages;
 
 public class ActionList {
     private List<Action> actions = new ArrayList<>();
@@ -17,7 +18,7 @@ public class ActionList {
 
         for(int i = 1; i < num; i++){
             Action act = Action.stringToAction(command[i]);
-            if(act == null)throw new ActionParseException("Accion no valida: " + command[i]);
+            if(act == null)throw new ActionParseException(Messages.UNKNOWN_ACTION.formatted(command[i]));
             actions.add(act);
         }
     }

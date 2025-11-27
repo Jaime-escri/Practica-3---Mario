@@ -1,8 +1,9 @@
 package tp1.control;
 
+import java.util.Arrays;
+
 import tp1.exceptions.CommandExecuteException;
 import tp1.exceptions.GameModelException;
-import tp1.logic.ActionList;
 import tp1.logic.GameModel;
 import tp1.logic.GameObject;
 import tp1.logic.GameWorld;
@@ -29,7 +30,7 @@ public class AddObjectCommand extends AbstractCommand {
 
     public Command parse(String[] words){
         if(matchCommand(words[0])){
-            String[] objects = words;
+            String[] objects = Arrays.copyOfRange(words, 1, words.length);;
             return new AddObjectCommand(objects);
         }
         return null;
