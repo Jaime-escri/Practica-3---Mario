@@ -9,7 +9,6 @@ public interface GameWorld {
     public boolean isSolid(Position pos);
     public void addPoints(int p);
     public boolean playerLoses();
-    public int isNotInBoard(Position pos);
     public void marioExited();
     public void addObject(GameObject o) throws OffBoardException;
     public GameObjectContainer getObjectContainer();

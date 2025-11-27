@@ -285,6 +285,7 @@ public class Mario extends MovingObject{
 			return false;
 		}
 		
+
         if(lastAction == Action.DOWN){ //Viene de arriba y va hacia abajo 
 			return true;
 		}else{

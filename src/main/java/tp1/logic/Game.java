@@ -3,6 +3,7 @@ package tp1.logic;
 import tp1.view.Messages;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import tp1.exceptions.GameLoadException;
 import tp1.exceptions.GameModelException;
@@ -27,6 +28,7 @@ public class Game implements GameModel, GameStatus, GameWorld{
 	private Mario mario;
 	public int nLevel;
 	private boolean isFinished;
+	private String fileloaded;
 
 
 	public Game(int nLevel) {
@@ -37,6 +39,7 @@ public class Game implements GameModel, GameStatus, GameWorld{
 		this.wins = false;
 		this.loses = false;
 		this.isFinished = false;
+		this.fileloaded = null;
 		this.container = new GameObjectContainer();
 		initLevel(nLevel);
 	}
@@ -94,7 +97,6 @@ public class Game implements GameModel, GameStatus, GameWorld{
 	}
 
 	public int numLives() {
-
 		return lives;
 	}
 
@@ -105,17 +107,25 @@ public class Game implements GameModel, GameStatus, GameWorld{
 	
 	public void initLevel(int nLevel) { //Vemos qué nivel inicializamos
 		this.time = 100;
-		
-		if(nLevel == 0){
-			initLevel0();
-		}else if(nLevel == 1){
-			initLevel1();
-		}else if(nLevel == -1){
-			this.lives = 3;
-			this.time = 100;
-			this.points = 0;
-			initLevelFree();
-		}
+		if(fileloaded != null){
+			try{
+				GameConfiguration gc = new FileGameConfiguration(fileloaded, this);
+				setFileConfiguration(gc);
+			}catch(GameLoadException gle){
+				
+			}
+		}else{
+			if(nLevel == 0){
+				initLevel0();
+			}else if(nLevel == 1){
+				initLevel1();
+			}else if(nLevel == -1){
+				this.lives = 3;
+				this.time = 100;
+				this.points = 0;
+				initLevelFree();
+			}
+		}		
 	}
 
 	public void reset(int nLevel){
@@ -188,7 +198,7 @@ public class Game implements GameModel, GameStatus, GameWorld{
 		this.mario = new Mario(1, false, new Position(Game.DIM_Y-3, 0), true, this);
 		container.add(this.mario);
 
-		container.add(new Goomba(-1, false, new Position(0, 19), this));
+		//container.add(new Goomba(-1, false, new Position(0, 19), this));
 	}
 
 
@@ -252,13 +262,6 @@ public class Game implements GameModel, GameStatus, GameWorld{
 		this.isFinished = true;
 	}
 
-	//Revisar función con <= o < etc...
-	public int isNotInBoard(Position p){
-		int ret = 0;
-		if(p.getCol() <= 0) ret = 1;
-		else if(p.getCol() >= DIM_X - 1) ret = -1;
-		return ret;
-	}
 
 	public void addObject(GameObject o) throws OffBoardException{
 		if(!isInsideBoard(o.getPosition())){
@@ -278,6 +281,7 @@ public class Game implements GameModel, GameStatus, GameWorld{
 
 	public void load(String file) throws GameLoadException{
 		try {
+			this.fileloaded = file;
 			GameConfiguration conf = new FileGameConfiguration(file, this);
 			setFileConfiguration(conf);
 		} catch (Exception e) {
@@ -291,7 +295,11 @@ public class Game implements GameModel, GameStatus, GameWorld{
 		this.lives = gc.numLives();
 		this.time = gc.getRemainingTime();
 
-		container.setListObjects(gc.getNPCObjects());
+		this.container = new GameObjectContainer();
+		for(GameObject g : gc.getNPCObjects()){
+			container.add(g);
+		}
+
 		this.mario = gc.getMario();
 		container.add(this.mario);
 	}

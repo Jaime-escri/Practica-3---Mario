@@ -40,14 +40,12 @@ public abstract class MovingObject extends GameObject{
         boolean hayObstaculo = world.isSolid(next); //Si hay obstaculo, movemos a la dirección contraria (derecha)
 
         if(hayObstaculo){
-            this.dir = -this.dir;
+            Position thereIsObstacle = Position.move(pos, Action.RIGHT);
+            g.pos = thereIsObstacle;
 
         }else{
             g.pos = next;
         }
-
-
-        this.dir = world.isNotInBoard(pos);
         world.doInteractionsFrom(g);
     }
 }
